@@ -3,6 +3,7 @@ const express = require("express");
 const cors = require("cors"); // Allows cross-origin requests (needed for frontend-backend communication).
 const helmet = require("helmet"); //Adds security headers to protect against web attacks.
 const morgan = require("morgan"); // Logs HTTP requests (useful for debugging).
+
 const connectDB = require("./src/config/db");
 const authRoutes = require("./src/routes/authRoutes");
 
@@ -28,6 +29,7 @@ app.use(morgan("dev")); // Logging requests
 // API Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/expenses", require("./src/routes/expenseRoutes"));
+
 
 // Default route (optional)
 app.get("/", (req, res) => {

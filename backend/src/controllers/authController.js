@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 // ✅ User Signup
+
 exports.signup = async (req, res) => {
   try {
     const { firstName, lastName, email, password } = req.body;
@@ -56,5 +57,6 @@ exports.login = async (req, res) => {
   } catch (error) {
     console.error("Login Error:", error);
     res.status(500).json({ error: "Failed to login" });
+
   }
 };
