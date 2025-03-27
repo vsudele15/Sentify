@@ -6,6 +6,7 @@ const morgan = require("morgan"); // Logs HTTP requests (useful for debugging).
 
 const connectDB = require("./src/config/db");
 const authRoutes = require("./src/routes/authRoutes");
+const pastExpenseRoutes = require('./src/routes/pastExpenses');
 
 const app = express();
 
@@ -29,6 +30,7 @@ app.use(morgan("dev")); // Logging requests
 // API Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/expenses", require("./src/routes/expenseRoutes"));
+app.use("/pastExpenses", require("./src/routes/pastExpenses"));
 
 
 // Default route (optional)
