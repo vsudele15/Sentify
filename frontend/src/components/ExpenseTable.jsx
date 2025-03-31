@@ -1,7 +1,7 @@
 import React from 'react';
 import ExpenseRow from './ExpenseRow';
 
-const ExpenseTable = ({ data }) => {
+const ExpenseTable = ({ data, onDelete, onEdit }) => {
   return (
     <div className="overflow-auto shadow-md rounded-lg">
       <table className="w-full text-sm text-left">
@@ -18,7 +18,7 @@ const ExpenseTable = ({ data }) => {
         </thead>
         <tbody>
         {data.map((expense, idx) => (
-            <ExpenseRow key={expense._id} expense={expense} serialNumber={idx + 1} />
+            <ExpenseRow key={expense._id} expense={expense} serialNumber={idx + 1} onDelete={onDelete} onEdit={onEdit}/>
         ))}
         </tbody>
       </table>

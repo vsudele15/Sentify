@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ExpenseRow = ({ expense, serialNumber }) => {
+const ExpenseRow = ({ expense, serialNumber, onDelete, onEdit }) => {
   return (
     <tr className="bg-[#D9EAD3] border-b">
       <td>#{serialNumber}</td>
@@ -13,8 +13,8 @@ const ExpenseRow = ({ expense, serialNumber }) => {
       <td>${expense.amount.toFixed(2)}</td>
       <td>{expense.emotion}</td>
       <td className="flex gap-3">
-        <button className="text-purple-700">✏️</button>
-        <button className="text-red-600">🗑️</button>
+        <button className="text-purple-700" onClick={() => onEdit(expense)}>✏️</button>
+        <button className="text-red-600" onClick={() => onDelete(expense._id)}>🗑️</button>
       </td>
     </tr>
   );
