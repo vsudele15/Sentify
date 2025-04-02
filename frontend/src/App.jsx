@@ -7,6 +7,7 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Navbar from "./components/Navbar";
 import PastExpenses from "./pages/PastExpenses";
+import Insights from "./pages/Insights";
 
 function App() {
   const location = useLocation();
@@ -22,6 +23,7 @@ function App() {
           {/* Protected Route for Dashboard */}
           <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
           <Route path="/expenses" element={<PrivateRoute><PastExpenses /></PrivateRoute>} />
+          <Route path="/insights" element={<PrivateRoute><Insights /></PrivateRoute>} />
         </Routes>
       </AnimatePresence>
     </AuthProvider>
