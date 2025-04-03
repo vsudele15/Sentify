@@ -31,6 +31,7 @@ app.use(morgan("dev")); // Logging requests
 app.use("/api/auth", authRoutes);
 app.use("/api/expenses", require("./src/routes/expenseRoutes"));
 app.use("/pastExpenses", require("./src/routes/pastExpenses"));
+app.use("/api/insights", require("./src/routes/insightRoutes"));
 
 
 // Default route (optional)
