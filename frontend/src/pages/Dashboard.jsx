@@ -1,13 +1,31 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useAuth } from "../context/AuthContext"; // Get user ID
 import manImage from "../assets/man-image.png";
+import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
 
 const Dashboard = () => {
   // Get user from AuthContext
   const { user } = useAuth();
-
+  const [firstName, setFirstName] = useState("");
+  const [moodData, setMoodData] = useState([]);
+  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF', '#F95F62'];
   useEffect(() => {
-    console.log("Current User Data:", user);
+    if (user && user.userId) {
+      // Fetch user first name
+      fetch(`http://localhost:5000/api/users/${user.userId}`)
+        .then((res) => res.json())
+        .then((data) => {
+          //console.log("Fetched user data:", data);
+          setFirstName(data.firstName);
+        })
+        .catch((err) => console.error("Error fetching user:", err));
+      
+        // Fetch mood breakdown data
+      fetch(`http://localhost:5000/api/expenses/emotion-breakdown?userId=${user.userId}`)
+        .then((res) => res.json())
+        .then((data) => setMoodData(data))
+        .catch((err) => console.error("Error fetching mood data:", err));
+    }
   }, [user]);
   // State to store form data
   const [expenseData, setExpenseData] = useState({
@@ -86,7 +104,7 @@ const Dashboard = () => {
     <div className="bg-[#FEFADC] min-h-screen"> {/* Full page background */}
       {/* Padding to push content below the navbar */}
       <div className="w-full max-w-screen-xl mx-auto p-6 pt-40">
-        <h1 className="text-2xl font-bold">Hi Vaidehi, Welcome back!</h1>
+        <h1 className="text-2xl font-bold">Hi {firstName || "User"}, Welcome back!</h1>
 
         {/* Grid Layout for Dashboard */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
@@ -172,10 +190,45 @@ const Dashboard = () => {
 
         {/* Bottom Row */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
-          <div className="bg-[#FEC459] p-6 rounded-2xl shadow-lg">
-            <h3 className="text-xl font-semibold">Mood breakdown</h3>
-            <div className="mt-4 w-full h-32 bg-white rounded-md"></div>
-          </div>
+        <div className="bg-[#FEC459] p-6 rounded-2xl shadow-lg">
+  <h3 className="text-xl font-semibold mb-2 text-[#2f2f2f]">Mood Breakdown</h3>
+  <div className="flex flex-col items-center justify-center">
+    {moodData.length > 0 ? (
+      <PieChart width={280} height={250}>
+        <Pie
+          data={moodData}
+          dataKey="count"
+          nameKey="emotion"
+          cx="50%"
+          cy="50%"
+          outerRadius={80}
+          label={({ name, percent }) =>
+            `${name} (${(percent * 100).toFixed(0)}%)`
+          }
+        >
+          {moodData.map((_, index) => (
+            <Cell
+              key={`cell-${index}`}
+              fill={COLORS[index % COLORS.length]}
+            />
+          ))}
+        </Pie>
+        <Tooltip
+          contentStyle={{ backgroundColor: "#ffffff", borderRadius: "10px" }}
+        />
+        <Legend
+          verticalAlign="bottom"
+          layout="horizontal"
+          iconType="circle"
+          wrapperStyle={{ fontSize: "14px", marginTop: "10px" }}
+        />
+      </PieChart>
+    ) : (
+      <p className="text-sm text-gray-800 mt-4">No mood data yet.</p>
+    )}
+  </div>
+</div>
+
 
           <div className="bg-[#3F7981] text-white p-6 rounded-2xl shadow-lg">
             <h3 className="text-xl font-semibold">Did You Know?</h3>

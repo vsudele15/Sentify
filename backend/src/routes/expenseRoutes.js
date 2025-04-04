@@ -176,6 +176,38 @@ router.get("/monthly-summary", async (req, res) => {
   }
 });
 
+// ✅ Get Emotion Breakdown (for pie chart)
+router.get("/emotion-breakdown", async (req, res) => {
+  const { userId } = req.query;
+
+  if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
+    return res.status(400).json({ error: "Invalid or missing userId" });
+  }
+
+  try {
+    const emotionCounts = await Expense.aggregate([
+      { $match: { userId: new mongoose.Types.ObjectId(userId) } },
+      {
+        $group: {
+          _id: "$emotion",
+          count: { $sum: 1 }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          emotion: "$_id",
+          count: 1
+        }
+      }
+    ]);
+
+    res.status(200).json(emotionCounts);
+  } catch (error) {
+    console.error("Error fetching emotion breakdown:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+});
 
 // ✅ Get All Expenses for a User
 router.get("/:userId", async (req, res) => {
@@ -187,5 +219,6 @@ router.get("/:userId", async (req, res) => {
     res.status(500).json({ error: "Failed to fetch expenses" });
   }
 });
+
 
 module.exports = router;
