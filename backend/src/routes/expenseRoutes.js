@@ -12,12 +12,14 @@ router.post("/add", async (req, res) => {
     if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
       return res.status(400).json({ error: "Invalid userId format" });
     }
+    const [year, month, day] = date.split("-").map(Number);
+    const localDate = new Date(year, month - 1, day);
 
     // ✅ Create new expense
     const newExpense = new Expense({
       userId: new mongoose.Types.ObjectId(userId), // Convert userId to ObjectId
       amount,
-      date: new Date(date), // Convert to Date object
+      date: localDate, // Convert to Date object
       category,
       emotion,
       description
