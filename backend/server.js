@@ -8,6 +8,7 @@ const connectDB = require("./src/config/db");
 const authRoutes = require("./src/routes/authRoutes");
 const pastExpenseRoutes = require('./src/routes/pastExpenses');
 const userRoutes = require('./src/./routes/users');
+const summaryRoutes = require("./src/routes/summaryRoutes");
 
 const app = express();
 
@@ -34,6 +35,7 @@ app.use('/api/users', userRoutes);
 app.use("/api/expenses", require("./src/routes/expenseRoutes"));
 app.use("/pastExpenses", require("./src/routes/pastExpenses"));
 app.use("/api/insights", require("./src/routes/insightRoutes"));
+app.use("/api/summary", summaryRoutes);
 
 
 // Default route (optional)

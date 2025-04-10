@@ -9,10 +9,8 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  Legend,
 } from "recharts";
 
-// Helper to map month number to name
 const monthNames = {
   1: "January",
   2: "February",
@@ -34,7 +32,7 @@ const MonthlySpendingChart = () => {
   const [chartData, setChartData] = useState([]);
 
   useEffect(() => {
-    const fetchMonthlySummary = async () => {
+    const fetchData = async () => {
       try {
         const token = localStorage.getItem("token");
         const decoded = jwtDecode(token);
@@ -44,74 +42,71 @@ const MonthlySpendingChart = () => {
           `http://localhost:5000/api/expenses/monthly-summary?userId=${userId}`
         );
 
-        // Group entries by month
+        // Group and format weekly totals per month
         const grouped = {};
         res.data.forEach((entry) => {
-          const month = entry.month;
-          const week = `W${entry.week}`;
+          const { month, week, total } = entry;
           if (!grouped[month]) grouped[month] = [];
-          const weekData = { week };
-          entry.categories.forEach((cat) => {
-            weekData[cat.category] = cat.total;
+          grouped[month].push({
+            week: `W${week}`,
+            total,
           });
-          grouped[month].push(weekData);
         });
 
-        const monthNums = Object.keys(grouped).map(Number).sort();
-        const defaultMonth = monthNums[monthNums.length - 1]; // latest month
-        setSelectedMonth(defaultMonth);
-        setMonthsAvailable(monthNums);
+        const months = Object.keys(grouped).map(Number).sort();
+        const latest = months[months.length - 1];
+
+        setMonthsAvailable(months);
+        setSelectedMonth(latest);
         setChartData(grouped);
       } catch (error) {
         console.error("Failed to fetch monthly summary", error);
       }
     };
 
-    fetchMonthlySummary();
+    fetchData();
   }, []);
 
   return (
     <div>
-      <div className="flex justify-end mb-2">
-        <select
-          value={selectedMonth || ""}
-          onChange={(e) => setSelectedMonth(Number(e.target.value))}
-          className="px-2 py-1 rounded border"
-        >
-          {monthsAvailable.map((monthNum) => (
-            <option key={monthNum} value={monthNum}>
-              {monthNames[monthNum]}
-            </option>
-          ))}
-        </select>
+      {/* Dropdown */}
+      <div className="flex justify-end mb-3">
+      <select
+        value={selectedMonth || ""}
+        onChange={(e) => setSelectedMonth(Number(e.target.value))}
+        className="px-2 py-1 text-sm border rounded focus:outline-none focus:ring-2 focus:ring-yellow-400"
+      >
+        {monthsAvailable.map((m) => (
+          <option key={m} value={m}>
+            {monthNames[m]}
+          </option>
+        ))}
+      </select>
       </div>
 
+
+      {/* Line Chart */}
       <ResponsiveContainer width="100%" height={250}>
-        <LineChart data={chartData[selectedMonth] || []}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="week" />
-          <YAxis />
-          <Tooltip />
-          <Legend />
-          {/* Dynamically generate lines based on categories */}
-          {chartData[selectedMonth] &&
-            Object.keys(
-              chartData[selectedMonth].reduce((acc, item) => {
-                Object.keys(item).forEach((key) => {
-                  if (key !== "week") acc[key] = true;
-                });
-                return acc;
-              }, {})
-            ).map((category) => (
-              <Line
-                key={category}
-                type="monotone"
-                dataKey={category}
-                strokeWidth={2}
-                dot={false}
-              />
-            ))}
-        </LineChart>
+      <LineChart data={chartData[selectedMonth]}>
+      <CartesianGrid stroke="#ccc" strokeDasharray="3 3" />         {/* Lighter grid */}
+      <XAxis dataKey="week" stroke="#ffffff" />                     {/* White X labels */}
+      <YAxis stroke="#ffffff" unit="$" />                           {/* White Y labels */}
+      <Tooltip 
+        contentStyle={{ backgroundColor: "#ffffff", borderRadius: "6px" }}
+        labelStyle={{ color: "#333" }}
+        itemStyle={{ color: "#333" }}
+        formatter={(value) => `$${value}`}                        
+      />
+      <Line
+        type="monotone"
+        dataKey="total"
+        stroke="#42a5f5"
+        strokeWidth={2}
+        dot={{ r: 3, stroke: "#ffffff", strokeWidth: 1 }}
+        name="Spending"
+      />
+      </LineChart>
+
       </ResponsiveContainer>
     </div>
   );

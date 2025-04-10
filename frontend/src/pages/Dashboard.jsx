@@ -2,6 +2,9 @@ import React, { useState, useContext, useEffect } from "react";
 import { useAuth } from "../context/AuthContext"; // Get user ID
 import manImage from "../assets/man-image.png";
 import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
+import DidYouKnowBox from "../components/DidYouKnowBox";
+import ExpenseOverviewBox from "../components/ExpenseOverviewBox";
+
 
 const Dashboard = () => {
   // Get user from AuthContext
@@ -181,10 +184,7 @@ const Dashboard = () => {
 
           {/* Right Column */}
           <div className="bg-[#FEC459] p-6 rounded-2xl shadow-lg">
-            <h3 className="text-xl font-semibold">Expense Overview</h3>
-            <p className="mt-2">Current Balance: <span className="font-bold">$5,432.85</span></p>
-            <p>Top Category: <span className="font-bold">Entertainment</span></p>
-            <p>Largest Purchase: <span className="font-bold">$250 - Shopping</span></p>
+          <ExpenseOverviewBox />
           </div>
         </div>
 
@@ -231,10 +231,7 @@ const Dashboard = () => {
 
 
           <div className="bg-[#3F7981] text-white p-6 rounded-2xl shadow-lg">
-            <h3 className="text-xl font-semibold">Did You Know?</h3>
-            <p className="mt-2">
-              Dopamine spikes when you shop, making it addictive. Budgeting can help balance emotions and finances.
-            </p>
+            <DidYouKnowBox />
           </div>
 
           <div className="flex justify-center items-center">

@@ -25,7 +25,7 @@ Respond like this:
 
   try {
     const response = await axios.post("http://localhost:11434/api/generate", {
-      model: "mistral",   // or "llama2", if you've pulled that instead
+      model: "mistral",   
       prompt,
       stream: false
     });

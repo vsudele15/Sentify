@@ -34,7 +34,7 @@ router.post("/add", async (req, res) => {
   }
 });
 
-// ✅ Get Expense Summary by Category
+// ✅ Get Expense Summary by Mood (as percentage of total)
 router.get("/category-summary", async (req, res) => {
   const { userId } = req.query;
 
@@ -43,29 +43,44 @@ router.get("/category-summary", async (req, res) => {
   }
 
   try {
+    // First, get total spending
+    const totalResult = await Expense.aggregate([
+      { $match: { userId: new mongoose.Types.ObjectId(userId) } },
+      { $group: { _id: null, total: { $sum: "$amount" } } }
+    ]);
+
+    const totalSpent = totalResult[0]?.total || 0;
+
+    // Now get spending by mood and compute percentage
     const summary = await Expense.aggregate([
       { $match: { userId: new mongoose.Types.ObjectId(userId) } },
       {
         $group: {
-          _id: "$category",
+          _id: "$emotion",
           total: { $sum: "$amount" }
         }
       },
       {
         $project: {
           _id: 0,
-          category: "$_id",
-          total: 1
+          mood: "$_id",
+          percentage: {
+            $round: [
+              { $multiply: [{ $divide: ["$total", totalSpent] }, 100] },
+              1
+            ]
+          }
         }
       }
     ]);
 
     res.status(200).json(summary);
   } catch (error) {
-    console.error("Error fetching category summary:", error);
+    console.error("Error fetching mood percentage breakdown:", error);
     res.status(500).json({ message: "Server Error" });
   }
 });
+
 
 router.get("/mood-summary", async (req, res) => {
   const { userId } = req.query;
@@ -79,34 +94,24 @@ router.get("/mood-summary", async (req, res) => {
       { $match: { userId: new mongoose.Types.ObjectId(userId) } },
       {
         $addFields: {
-          week: { $isoWeek: "$date" } // Extract week number from date
+          month: { $month: "$date" }
         }
       },
       {
         $group: {
-          _id: { week: "$week", emotion: "$emotion" },
+          _id: { month: "$month", mood: "$emotion" },
           total: { $sum: "$amount" }
-        }
-      },
-      {
-        $group: {
-          _id: "$_id.week",
-          emotions: {
-            $push: {
-              emotion: "$_id.emotion",
-              total: "$total"
-            }
-          }
         }
       },
       {
         $project: {
           _id: 0,
-          week: "$_id",
-          emotions: 1
+          month: "$_id.month",
+          mood: "$_id.mood",
+          total: 1
         }
       },
-      { $sort: { week: 1 } }
+      { $sort: { month: 1 } }
     ]);
 
     res.status(200).json(summary);
@@ -140,24 +145,9 @@ router.get("/monthly-summary", async (req, res) => {
         $group: {
           _id: {
             month: "$month",
-            week: "$week",
-            category: "$category"
+            week: "$week"
           },
           total: { $sum: "$amount" }
-        }
-      },
-      {
-        $group: {
-          _id: {
-            month: "$_id.month",
-            week: "$_id.week"
-          },
-          categories: {
-            $push: {
-              category: "$_id.category",
-              total: "$total"
-            }
-          }
         }
       },
       {
@@ -165,7 +155,7 @@ router.get("/monthly-summary", async (req, res) => {
           _id: 0,
           month: "$_id.month",
           week: "$_id.week",
-          categories: 1
+          total: 1
         }
       },
       { $sort: { month: 1, week: 1 } }
