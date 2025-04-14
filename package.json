@@ -1,5 +1,8 @@
 {
   "dependencies": {
+    "date-fns": "^4.1.0",
+    "react-calendar": "^5.1.0",
+    "react-toastify": "^11.0.5",
     "recharts": "^2.15.1"
   }
 }

@@ -4,7 +4,9 @@ import manImage from "../assets/man-image.png";
 import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
 import DidYouKnowBox from "../components/DidYouKnowBox";
 import ExpenseOverviewBox from "../components/ExpenseOverviewBox";
-
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+import StreakCalendar from '../components/StreakCalendar';
 
 const Dashboard = () => {
   // Get user from AuthContext
@@ -92,13 +94,13 @@ const Dashboard = () => {
         throw new Error(result.error || "Failed to add expense");
       }
   
-      alert("Expense Added Successfully!");
+      toast.success("Expense Added Successfully!");
   
       setExpenseData({ amount: "", date: "", category: "", emotion: "", description: "" });
   
     } catch (error) {
       console.error("❌ Error submitting expense:", error);
-      alert(`Error submitting the form: ${error.message}`);
+      toast.error(`Error submitting the form: ${error.message}`);
     }
   };
   
@@ -107,13 +109,13 @@ const Dashboard = () => {
     <div className="bg-[#FEFADC] min-h-screen"> {/* Full page background */}
       {/* Padding to push content below the navbar */}
       <div className="w-full max-w-screen-xl mx-auto p-6 pt-40">
-        <h1 className="text-2xl font-bold">Hi {firstName || "User"}, Welcome back!</h1>
+        <h1 className="text-3xl font-bold text-gray-800">Hi {firstName || "User"}, Welcome back!</h1>
 
         {/* Grid Layout for Dashboard */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
           {/* Left Column */}
           <div className="md:col-span-2 bg-[#3F7981] text-white p-6 rounded-2xl shadow-lg">
-            <h2 className="text-xl font-semibold mb-4">Add New Expense</h2>
+            <h2 className="text-2xl font-semibold mb-4 ">Add New Expense</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <input
@@ -191,46 +193,52 @@ const Dashboard = () => {
         {/* Bottom Row */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
         <div className="bg-[#FEC459] p-6 rounded-2xl shadow-lg">
-  <h3 className="text-xl font-semibold mb-2 text-[#2f2f2f]">Mood Breakdown</h3>
-  <div className="flex flex-col items-center justify-center">
-    {moodData.length > 0 ? (
-      <PieChart width={280} height={250}>
-        <Pie
-          data={moodData}
-          dataKey="count"
-          nameKey="emotion"
-          cx="50%"
-          cy="50%"
-          outerRadius={80}
-          label={({ name, percent }) =>
-            `${name} (${(percent * 100).toFixed(0)}%)`
-          }
-        >
-          {moodData.map((_, index) => (
-            <Cell
-              key={`cell-${index}`}
-              fill={COLORS[index % COLORS.length]}
-            />
-          ))}
-        </Pie>
-        <Tooltip
-          contentStyle={{ backgroundColor: "#ffffff", borderRadius: "10px" }}
-        />
-        <Legend
-          verticalAlign="bottom"
-          layout="horizontal"
-          iconType="circle"
-          wrapperStyle={{ fontSize: "14px", marginTop: "10px" }}
-        />
-      </PieChart>
-    ) : (
-      <p className="text-sm text-gray-800 mt-4">No mood data yet.</p>
-    )}
-  </div>
-</div>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-900">Expense Streak Tracker</h2>
+          <StreakCalendar userId={user?.userId} />
+        </div>
 
+        {/* <div className="bg-[#FEC459] p-6 rounded-2xl shadow-lg">
+        <h3 className="text-xl font-semibold mb-2 text-[#2f2f2f]">Mood Breakdown</h3>
+        <div className="flex flex-col items-center justify-center">
+            {moodData.length > 0 ? (
+            <PieChart width={280} height={250}>
+            <Pie
+              data={moodData}
+              dataKey="count"
+              nameKey="emotion"
+              cx="50%"
+              cy="50%"
+              outerRadius={80}
+              label={({ name, percent }) =>
+                `${name} (${(percent * 100).toFixed(0)}%)`
+              }
+                >
+              {moodData.map((_, index) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={COLORS[index % COLORS.length]}
+                />
+              ))}
+            </Pie>
+            <Tooltip
+              contentStyle={{ backgroundColor: "#ffffff", borderRadius: "10px" }}
+                  />
+              <Legend
+                verticalAlign="bottom"
+                layout="horizontal"
+                iconType="circle"
+                wrapperStyle={{ fontSize: "14px", marginTop: "10px" }}
+              />
+            </PieChart>
+          ) : (
+            <p className="text-sm text-gray-800 mt-4">No mood data yet.</p>
+          )}
+        </div>
+      </div> */}
+  
 
           <div className="bg-[#3F7981] text-white p-6 rounded-2xl shadow-lg">
+            <h3 className="text-2xl font-semibold mb-4 text-white">Did You Know?</h3>
             <DidYouKnowBox />
           </div>
 
@@ -240,6 +248,7 @@ const Dashboard = () => {
         </div>
       </div>
 
+      <ToastContainer position="top-center" autoClose={3000} />
     </div>
   );
 };

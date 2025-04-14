@@ -26,14 +26,14 @@ const ExpenseOverviewBox = () => {
 
   return (
     <div className="bg-[#FEC459] p-6 rounded-2xl">
-      <h3 className="text-xl font-semibold">Expense Overview</h3>
-      <p className="mt-2">
+      <h3 className="text-2xl font-semibold mb-4 text-gray-900">Expense Overview</h3>
+      <p className="mt-2 text-xl">
         Current Balance: <span className="font-bold">${summary.total.toFixed(2)}</span>
       </p>
-      <p>
+      <p className="mt-2 text-xl">
         Top Category: <span className="font-bold">{summary.topCategory}</span>
       </p>
-      <p>
+      <p className="mt-2 text-xl">
         Largest Purchase:{" "}
         <span className="font-bold">
           ${summary.largestPurchase.amount} - {summary.largestPurchase.category}

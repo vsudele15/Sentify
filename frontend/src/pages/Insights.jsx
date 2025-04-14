@@ -32,7 +32,6 @@ const Insights = () => {
 
 
           <div className="bg-[#fbbc57] shadow-md p-3 rounded-lg">
-            <h2 className="text-xl font-semibold mb-2">Insights</h2>
             <InsightsBox />
           </div>
         </div>

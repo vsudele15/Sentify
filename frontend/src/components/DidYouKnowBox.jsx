@@ -23,14 +23,8 @@ const DidYouKnowBox = () => {
   };
 
   return (
-    <div className="bg-[#3F7981] text-white p-6 rounded-2xl relative">
-      <div className="flex justify-between items-center mb-2">
-        <h3 className="text-xl font-semibold">Did You Know?</h3>
-        <button onClick={showNextFact} className="text-white text-lg hover:text-gray-300">
-          🔁
-        </button>
-      </div>
-
+    <div className="bg-[#3F7981] text-white p-6 rounded-2xl relative text-xl ">
+      
       <AnimatePresence mode="wait">
         {showFact && (
           <motion.p
@@ -45,6 +39,12 @@ const DidYouKnowBox = () => {
           </motion.p>
         )}
       </AnimatePresence>
+
+      <div className="flex justify-end items-end mt-6">
+        <button onClick={showNextFact} className="text-white text-3xl hover:scale-110 transition-transform">
+              🔁
+        </button>
+      </div>
     </div>
   );
 };

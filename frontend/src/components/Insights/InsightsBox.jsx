@@ -53,15 +53,18 @@ const InsightsBox = () => {
 
   return (
     <div className="space-y-3">
+      <div className="flex justify-between items-center mb-3">
+      <h2 className="text-xl font-semibold mb-2">Insights</h2>
       <button
-        className="text-sm text-blue-600 underline"
-        onClick={() => {
-          localStorage.removeItem("ai_insights");
-          window.location.reload();
-        }}
-      >
-        Regenerate Insights
-      </button>
+      className="bg-yellow-500 hover:bg-yellow-600 text-white text-sm font-medium px-4 py-1.5 rounded shadow transition duration-200"
+      onClick={() => {
+        localStorage.removeItem("ai_insights");
+        window.location.reload();
+      }}
+    >
+      🔁 Regenerate Insights
+    </button>
+    </div>
 
       {loading ? (
         <p className="text-sm text-gray-600">Generating insights...</p>
