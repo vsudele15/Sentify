@@ -3,7 +3,15 @@ import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
 
-const COLORS = ["#0066cc", "#c0392b", "#f39c12", "#e67e22", "#27ae60", "#8e44ad", "#2ecc71", "#d35400"];
+//const COLORS = ["#0066cc", "#c0392b", "#f39c12", "#e67e22", "#27ae60", "#8e44ad", "#2ecc71", "#d35400"];
+const COLORS = {
+  Happy: "#2ecc71",
+  Neutral: "#f39c12",
+  Stressed: "#e74c3c",
+  Sad: "#9b59b6",
+  Guilty: "#34495e",
+  Excited: "#3498db",
+};
 
 const ExpenseByCategoryChart = () => {
   const [data, setData] = useState([]);
@@ -48,7 +56,7 @@ const ExpenseByCategoryChart = () => {
         label={({ name }) => `${name}`}
       >
           {data.map((entry, index) => (
-            <Cell key={index} fill={COLORS[index % COLORS.length]} />
+            <Cell key={index} fill={COLORS[entry.name] || "#8884d8"} />
           ))}
         </Pie>
         <Tooltip formatter={(value) => `${value}%`} />

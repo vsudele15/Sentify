@@ -15,7 +15,7 @@ import {
 
 const COLORS = {
   Happy: "#2ecc71",
-  Neutral: "#f1c40f",
+  Neutral: "#f39c12",
   Stressed: "#e74c3c",
   Sad: "#9b59b6",
   Guilty: "#34495e",
@@ -111,9 +111,9 @@ const MoodVsSpendingChart = () => {
         <BarChart data={filteredData}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="mood" />
-          <YAxis />
+          <YAxis tickFormatter={(value) => `$${value}`}/>
           <Tooltip />
-          <Legend />
+          
           <Bar dataKey="value" name="Spending" radius={[4, 4, 0, 0]}>
             {filteredData.map((entry, index) => (
               <Cell

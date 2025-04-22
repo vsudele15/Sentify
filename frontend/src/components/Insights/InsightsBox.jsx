@@ -54,7 +54,7 @@ const InsightsBox = () => {
   return (
     <div className="space-y-3">
       <div className="flex justify-between items-center mb-3">
-      <h2 className="text-xl font-semibold mb-2">Insights</h2>
+      <h2 className="text-2xl font-bold text-gray-800">Insights</h2>
       <button
       className="bg-yellow-500 hover:bg-yellow-600 text-white text-sm font-medium px-4 py-1.5 rounded shadow transition duration-200"
       onClick={() => {
@@ -62,7 +62,7 @@ const InsightsBox = () => {
         window.location.reload();
       }}
     >
-      🔁 Regenerate Insights
+      🔁 Regenerate 
     </button>
     </div>
 
@@ -72,9 +72,10 @@ const InsightsBox = () => {
         insights.map((insight, index) => (
           <div
             key={index}
-            className="bg-white p-3 rounded-md border-l-4 border-yellow-500 shadow-sm text-sm"
+            className="bg-yellow-50 p-4 rounded-2xl border-l-4 border-yellow-500 shadow-md text-gray-700 text-sm hover:shadow-lg transition-all duration-300"
           >
-            {insight}
+            <span className="font-semibold">{insight.split(":")[0]}:</span>
+            {insight.split(":").slice(1).join(":")}
           </div>
         ))
       )}

@@ -31,8 +31,8 @@ const Navbar = () => {
           {/* Show additional menu items only if NOT on auth pages */}
           {!isAuthPage && (
             <div className="flex items-center space-x-6">
-              <Link to="/expenses" className="hover:text-gray-400 text-gray-800">Past Expenses</Link>
-              <Link to="/insights" className="hover:text-gray-400 text-gray-800">Insights</Link>
+              <Link to="/expenses" className="hover:text-gray-400 text-gray-800 text-xl">Past Expenses</Link>
+              <Link to="/insights" className="hover:text-gray-400 text-gray-800 text-xl">Insights</Link>
               
               {/* Profile Button */}
               <button onClick={() => setIsProfileOpen(true)} className="focus:outline-none">
