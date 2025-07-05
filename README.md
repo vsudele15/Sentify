@@ -1,3 +1,6 @@
+markdown 
+   [DEMO VIDEO]([URL](https://drive.google.com/file/d/1822NDb10cWZdxch1PHkyyYD2YXj4rrex/view?usp=sharing)) 
+
 # Sentify
 
 Sentify is a MERN stack application that tracks users' expenses and emotions, using AI to predict emotional states based on spending habits.
@@ -20,3 +23,5 @@ git clone https://github.com/your-username/Sentify.git
 cd Sentify
 npm install
 npm run dev
+
+
