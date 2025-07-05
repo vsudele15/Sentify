@@ -1,5 +1,5 @@
 markdown 
-   [DEMO VIDEO]((https://drive.google.com/file/d/1822NDb10cWZdxch1PHkyyYD2YXj4rrex/view?usp=sharing)) 
+   [DEMO VIDEO](https://drive.google.com/file/d/1822NDb10cWZdxch1PHkyyYD2YXj4rrex/view?usp=sharing) 
 
 # Sentify
 
